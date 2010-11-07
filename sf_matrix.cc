@@ -124,6 +124,67 @@ sparserow* sf_row_subset(sparserow *r, size_t *rows, size_t nrows)
     return s;
 }
 
+/** Compute a new sparse matrix from a subset of rows and columns
+ * 
+ * The order of the new matrix is the same as the order of the rows
+ * in set.
+ * 
+ * @param r the initial matrix
+ * @param set the subset of rows and columns 
+ * @param nset the size of the set
+ */
+sparserow* sf_rowcol_subset(sparserow *r, size_t *set, size_t nset)
+{
+  bool values = r->a != NULL;
+  // setup iwork array to hold new indices
+  int* iwork = (int*)malloc(sizeof(int)*r->n);
+  if (!iwork) { return NULL; }  // TODO add error
+  
+  // build map for fast lookup 
+  memset(iwork, -1, sizeof(int)*r->n);
+  for (size_t i=0; i<nset; ++i) {
+    assert(set[i] < r->n);
+    assert(set[i] < r->m);
+    iwork[set[i]] = i;
+  }
+  
+  // compute the non-zeros of the new matrix
+  size_t newnz = 0;
+  for (size_t i=0; i<nset; ++i) {
+    size_t ri = set[i];
+    for (int nzi=r->ai[ri]; nzi<r->ai[ri+1]; ++nzi) {
+      if (iwork[r->aj[nzi]] >= 0) {
+        newnz += 1;
+      }
+    }
+  }
+  
+  // allocate memory
+  sparserow *s=sparserow_fullalloc(nset,newnz,values);
+  if (s == NULL) { free(iwork); return NULL; } // TODO add error
+  s->n = nset;
+  
+  size_t curnz = 0;
+  // copy non-zeros
+  for (size_t i=0; i<nset; i++) {
+    size_t ri = set[i];
+    s->ai[i] = curnz;
+    for (int nzi = r->ai[ri]; nzi < r->ai[ri+1]; ++nzi) {
+      if (iwork[r->aj[nzi]] >= 0) {
+        s->aj[curnz] = iwork[r->aj[nzi]];
+        if (values) { s->a[curnz] = r->a[nzi]; }
+        curnz++;
+      }
+    }
+  }
+  s->ai[nset] = curnz;
+  
+  assert(curnz == newnz);
+  
+  free(iwork);
+  return s;
+}
+
 template <typename T>
 class sortvals_functor {
 public:

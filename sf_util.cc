@@ -13,6 +13,20 @@
 /** History
  * 2008-09-01: Initial coding
  */
+/**
+ * @file sf_util.cc
+ * Sparse matrix utility routines
+ */
+
+/*
+ * David F. Gleich
+ * Copyright, 2008-2010
+ */
+
+/** History
+ * 2008-09-01: Initial coding
+ */
+
 
 #include "sparfun_util.h"
 

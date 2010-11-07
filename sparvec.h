@@ -8,6 +8,10 @@
  * Copyright, Microsoft Corporation, 2008
  */
 
+
+#ifndef SPARFUN_SPARVEC_H
+#define SPARFUN_SPARVEC_H
+
 /** History
  *  2008-07-03: Initial coding
  */
@@ -53,7 +57,7 @@ struct sparsevec {
    */
   int max_index() {
     int index=0;
-    double maxval=std::numeric_limits<double>::max();
+    double maxval=std::numeric_limits<double>::min();
     for (map_type::iterator it=map.begin(),itend=map.end();it!=itend;++it) {
       if (it->second>maxval) { maxval = it->second; index = it->first; }
     }
@@ -62,7 +66,5 @@ struct sparsevec {
 };
 
 
-
-
-
+#endif /* SPARFUN_SPARVEC_H */
 

@@ -3,6 +3,10 @@
  * Utility functions for the sparse matrix function library
  */
 
+#ifndef SPARFUN_SPARFUN_UTIL_H
+#define SPARFUN_SPARFUN_UTIL_H
+
+
 /*
  * David F. Gleich
  * Copyright, 2008-2010
@@ -62,3 +66,5 @@ struct wall_timer {
     }
 };
 #endif
+
+#endif /* SPARFUN_SPARFUN_UTIL_H */
