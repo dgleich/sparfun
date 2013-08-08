@@ -30,8 +30,6 @@
 
 #include "sparfun_util.h"
 
-#include <random>
-
 #if defined(_WIN32) || defined(_WIN64)
   #pragma warning(disable:4996)
   #include <random>
@@ -40,7 +38,7 @@
   #define GCC_VERSION (__GNUC__ * 10000 \
 						   + __GNUC_MINOR__ * 100 \
 						   + __GNUC_PATCHLEVEL__)
-  #if GCC_VERSION < 40600
+  #if GCC_VERSION < 40700
     #include <tr1/random>
     #define tr1ns std::tr1
   #else
